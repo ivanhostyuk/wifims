@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>‏Wi-Fi password. SchoolMagala</title>
+<style>
+  body {
+    background-image: url('your-image.jpg'); /* Додайте шлях до фонового зображення */
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #CD853F;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  #reloadButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #964B00;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+  #statusDisplay {
+    margin-top: 60px; /* Змінено відступ, щоб зробити місце для кнопки перезавантаження */
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <button id="reloadButton" onclick="reloadPage()">⟳</button>
+    <h1>Wi-Fi password</h1>
+    <form id="statusForm">
+      <label for="statusInput">Точна назва вайфаю. БЕЗ ПРОБІЛІВ:</label>
+      <input type="text" id="statusInput" name="statusInput" required>
+      <button type="button" onclick="showCaptcha()">Пошук</button>
+    </form>
+    <div id="statusDisplay"></div>
+    <button id="copyButton" style="display: none;" onclick="copyPassword()">COPY</button>
+  </div>
+
+  <div id="captchaModal" style="display: none;">
+    <p><font color="purple"><b>Поставте галочку, щоб підтвердити, що ви не є роботом:</b></font></p>
+    <label>
+      <input type="checkbox" id="captchaCheckbox"> <font color="green">Я не робот</font>
+    </label>
+    <button onclick="verifyCaptcha()">Перевірити</button>
+  </div>
+
+  <div id="modal" style="display: none;">
+    <div id="modal-content">
+      <p id="modal-text">Пароль УСПІШНО був скопійован в буфер обміну</p>
+      <button onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    let captchaVerified = false;
+
+    function showCaptcha() {
+      const captchaModal = document.getElementById("captchaModal");
+      captchaModal.style.display = "block";
+    }
+
+    function verifyCaptcha() {
+      const captchaCheckbox = document.getElementById("captchaCheckbox");
+      if (captchaCheckbox.checked) {
+        captchaVerified = true;
+        const captchaModal = document.getElementById("captchaModal");
+        captchaModal.style.display = "none";
+        checkStatus();
+      } else {
+        alert("Ви недоказали, що ви не є роботом.");
+      }
+    }
+
+    function checkStatus() {
+      if (!captchaVerified) {
+        return;
+      }
+
+      const input = document.getElementById("statusInput").value;
+      let statusMessage = "";
+      const statusDisplay = document.getElementById("statusDisplay");
+      const copyButton = document.getElementById("copyButton");
+
+      if (input === "mahalzosh") {
+        statusMessage = '<font color="red" size="4"><b><u>Zosh61240</u></b></font>';
+        copyButton.style.display = "block"; // Показуємо кнопку "COPY"
+      } else if (input === "TP-LINK_AP_FDBE") {
+        statusMessage = '<font color="red" size="4"><b><u>28072012</u></b></font>';
+        copyButton.style.display = "block"; // Показуємо кнопку "COPY"
+      } else if (input === "WIN7PC_Network") {
+        statusMessage = '<font color="red" size="4"><b><u>informatika2</u></b></font>';
+        copyButton.style.display = "block"; // Показуємо кнопку "COPY"
+      } else if (input === "TP-LINK_23FC") {
+        statusMessage = '<font color="red" size="4"><b><u>54656260</u></b></font>';
+        copyButton.style.display = "block"; // Показуємо кнопку "COPY"
+      } else if (input === "alllist") {
+        // Додайте всі доступні назви мереж і паролі тут
+        statusMessage = `
+          <p><b>mahalzosh</b>: Zosh61240</p>
+          <p><b>TP-LINK_AP_FDBE</b>: 28072012</p>
+          <p><b>WIN7PC_Network</b>: informatika2</p>
+          <p><b>TP-LINK_23FC</b>: 54656260</p>
+          <p><b>Hostyuk_Wi-Fi</b>: freewifi</p>
+        `;
+        copyButton.style.display = "none"; // Приховуємо кнопку "COPY"
+      } else {
+        statusMessage = "Не знайдено! Перевірте, можливо, неправильно написали назву!";
+        copyButton.style.display = "none"; // Приховуємо кнопку "COPY"
+      }
+
+      statusDisplay.innerHTML = statusMessage;
+    }
+
+    function copyPassword() {
+      const statusDisplay = document.getElementById("statusDisplay");
+      const textToCopy = statusDisplay.innerText || statusDisplay.textContent;
+      const textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      showSuccessModal();
+    }
+
+    function showSuccessModal() {
+      const modal = document.getElementById("modal");
+      const modalText = document.getElementById("modal-text");
+      modal.style.display = "block";
+      modalText.innerText = "Пароль УСПІШНО був скопійован в буфер обміну";
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("modal");
+      modal.style.display = "none";
+    }
+
+    function reloadPage() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
